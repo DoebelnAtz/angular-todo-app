@@ -1,21 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../shared/services/user.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.less']
+	selector: 'app-login',
+	templateUrl: './login.component.html',
+	styleUrls: ['./login.component.less'],
+	providers: [RouterLink],
 })
-
 export class LoginComponent implements OnInit {
 	constructor(private user: UserService, private router: Router) {}
 
-	onLoginClick () {
-		let res = this.user.GoogleAuth()
+	async onGoogleLogin() {
+		await this.user.GoogleAuth();
 	}
 
-  ngOnInit(): void {
-  }
+	async onAnonymousLogin() {
+		await this.user.AnonymousAuth();
+	}
 
+	ngOnInit(): void {}
 }
