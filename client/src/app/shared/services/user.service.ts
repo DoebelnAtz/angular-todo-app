@@ -5,19 +5,20 @@ import { Router } from '@angular/router';
 import firebase from 'firebase/app';
 import AuthProvider = firebase.auth.AuthProvider;
 import { ApiService } from './api.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
 	providedIn: 'root',
 })
-export class UserService {
+export class UserService extends ApiService {
 	user: any;
 	constructor(
 		public afs: AngularFirestore,
 		public afAuth: AngularFireAuth,
 		public router: Router,
-		public ngZone: NgZone,
-		private api: ApiService
+		public ngZone: NgZone
 	) {
+		super();
 		this.afAuth.authState.subscribe((user) => {
 			if (user) {
 				this.user = user;

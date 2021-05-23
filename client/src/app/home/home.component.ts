@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TodoService } from '../shared/services/todo.service';
+import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'app-home',
@@ -7,7 +9,12 @@ import { RouterLink } from '@angular/router';
 	styleUrls: ['./home.component.less'],
 })
 export class HomeComponent implements OnInit {
-	constructor() {}
+	tasks: Task[] | undefined;
+	constructor(private todoService: TodoService) {}
 
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		this.todoService.getTasks<Task[]>().subscribe((resp) => {
+			this.tasks = resp;
+		});
+	}
 }
