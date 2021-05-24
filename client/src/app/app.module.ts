@@ -19,6 +19,7 @@ import { TasksComponent } from './home/tasks/tasks.component';
 import { AddTaskComponent } from './home/tasks/add-task/add-task.component';
 import { FormsModule } from '@angular/forms';
 import { TaskCardComponent } from './home/tasks/task-card/task-card.component';
+import { HeaderComponent } from './home/header/header.component';
 
 const routes: Routes = [
 	{ path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -34,6 +35,7 @@ const routes: Routes = [
 		TasksComponent,
 		AddTaskComponent,
 		TaskCardComponent,
+		HeaderComponent,
 	],
 	imports: [
 		BrowserModule,
