@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { TodoService } from '../shared/services/todo.service';
-import { Observable } from 'rxjs';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { TaskService } from '../shared/services/task.service';
+import { Observable, Observer, Subscription } from 'rxjs';
+import { UserService } from '../shared/services/user.service';
+import { concatMap, tap } from 'rxjs/operators';
+import firebase from 'firebase';
+import UserInfo = firebase.UserInfo;
+import { User } from '../shared/models/user.model';
 
 @Component({
 	selector: 'app-home',
@@ -9,12 +14,19 @@ import { Observable } from 'rxjs';
 	styleUrls: ['./home.component.less'],
 })
 export class HomeComponent implements OnInit {
-	tasks: Task[] | undefined;
-	constructor(private todoService: TodoService) {}
+	user: User | undefined;
 
-	ngOnInit(): void {
-		this.todoService.getTasks<Task[]>().subscribe((resp) => {
-			this.tasks = resp;
+	constructor(
+		private todoService: TaskService,
+		public userService: UserService,
+		private route: ActivatedRoute
+	) {}
+
+	ngOnInit() {
+		this.userService.user.subscribe((userData) => {
+			this.user = userData;
 		});
 	}
+
+	ngOnDestroy() {}
 }

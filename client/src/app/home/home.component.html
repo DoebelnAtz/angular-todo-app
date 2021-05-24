@@ -1,2 +1,7 @@
 <p>home</p>
+<div *ngIf='(userService.user | async); else loadingTemplate'>
+	<app-tasks ></app-tasks>
+</div>
+<ng-template #loadingTemplate>Loading...</ng-template>
+
 <a [routerLink]="['/login']">to login</a>

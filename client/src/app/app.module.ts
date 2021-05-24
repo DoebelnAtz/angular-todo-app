@@ -12,6 +12,13 @@ import { HomeComponent } from './home/home.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { AuthGuard } from './shared/guard/auth.guard';
 import { HttpClientModule } from '@angular/common/http';
+import { TaskService } from './shared/services/task.service';
+import { UserService } from './shared/services/user.service';
+import { ApiService } from './shared/services/api.service';
+import { TasksComponent } from './home/tasks/tasks.component';
+import { AddTaskComponent } from './home/tasks/add-task/add-task.component';
+import { FormsModule } from '@angular/forms';
+import { TaskCardComponent } from './home/tasks/task-card/task-card.component';
 
 const routes: Routes = [
 	{ path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -24,6 +31,9 @@ const routes: Routes = [
 		LoginComponent,
 		HomeComponent,
 		SignupComponent,
+		TasksComponent,
+		AddTaskComponent,
+		TaskCardComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -32,9 +42,10 @@ const routes: Routes = [
 		AngularFireModule.initializeApp(environment.firebase),
 		AngularFireAuthModule,
 		AngularFirestoreModule,
+		FormsModule,
 		HttpClientModule,
 	],
-	providers: [],
+	providers: [TaskService, UserService, ApiService],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}

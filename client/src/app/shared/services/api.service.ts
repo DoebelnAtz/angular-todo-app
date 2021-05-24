@@ -9,20 +9,44 @@ import { Observable, Observer } from 'rxjs';
 export class ApiService {
 	constructor(private http: HttpClient) {}
 
-	async post(endpoint: string, data: any, ...args: any[]) {
-		this.http
-			.post(`${environment.url}${endpoint}`, data, ...args)
-			.subscribe((resp) => {
-				return resp;
-			});
+	post<T>(endpoint: string, data: any, ...args: any[]) {
+		let response = this.http.post<Response & T>(
+			`${environment.url}${endpoint}`,
+			data,
+			...args
+		);
+
+		return Observable.create((observer: Observer<T>) => {
+			response.subscribe(
+				(res) => {
+					observer.next(res);
+					observer.complete();
+				},
+				(error) => {
+					observer.error([error]);
+				}
+			);
+		});
 	}
 
-	async patch(endpoint: string, data: any, ...args: any[]) {
-		this.http
-			.patch(`${environment.url}${endpoint}`, data, ...args)
-			.subscribe((resp) => {
-				return resp;
-			});
+	patch<T>(endpoint: string, data: any, ...args: any[]) {
+		let response = this.http.patch<Response & T>(
+			`${environment.url}${endpoint}`,
+			data,
+			...args
+		);
+
+		return Observable.create((observer: Observer<T>) => {
+			response.subscribe(
+				(res) => {
+					observer.next(res);
+					observer.complete();
+				},
+				(error) => {
+					observer.error([error]);
+				}
+			);
+		});
 	}
 
 	get<T>(endpoint: string, ...args: any[]) {
@@ -33,8 +57,8 @@ export class ApiService {
 
 		return Observable.create((observer: Observer<T>) => {
 			response.subscribe(
-				(response) => {
-					observer.next(response);
+				(res) => {
+					observer.next(res);
 					observer.complete();
 				},
 				(error) => {

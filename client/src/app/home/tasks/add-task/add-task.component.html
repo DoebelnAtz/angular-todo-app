@@ -1,0 +1,2 @@
+<input type='text' (keydown)='onTaskNameInputEnter($event)' [(ngModel)]='taskName'/>
+<button (click)='onAddTaskClick()' [disabled]='!taskName.length'>add</button>

@@ -1,6 +1,7 @@
 import { ErrorRequestHandler, RequestHandler } from "express";
 
 export const handleError: ErrorRequestHandler = (error, req, res, next) => {
+  console.log(`ERROR: ${error.description}`);
   return res.status(error.status).json({
     error: error.response,
     message: error.message,
