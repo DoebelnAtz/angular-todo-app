@@ -1,2 +1,16 @@
-<input type='text' (keydown)='onTaskNameInputEnter($event)' [(ngModel)]='taskName'/>
-<button (click)='onAddTaskClick()' [disabled]='!taskName.length'>add</button>
+<div class='container'>
+	<input
+		id='add-task-input'
+		type='text'
+		placeholder='add task'
+		(keydown)='onTaskNameInputEnter($event)'
+		[(ngModel)]='taskName'
+	/>
+	<button
+		id='add-task-button'
+		(click)='onAddTaskClick()'
+		[disabled]='!taskName.length'
+	>
+		add
+	</button>
+</div>

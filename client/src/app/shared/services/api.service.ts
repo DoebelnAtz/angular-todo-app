@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpSentEvent } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable, Observer } from 'rxjs';
 
@@ -59,6 +59,24 @@ export class ApiService {
 			response.subscribe(
 				(res) => {
 					observer.next(res);
+					observer.complete();
+				},
+				(error) => {
+					observer.error([error]);
+				}
+			);
+		});
+	}
+
+	delete<T>(endpoint: string, data: any) {
+		let response = this.http.delete<HttpSentEvent & T>(
+			`${environment.url}${endpoint}`,
+			data
+		);
+
+		return Observable.create((observer: Observer<T>) => {
+			response.subscribe(
+				() => {
 					observer.complete();
 				},
 				(error) => {

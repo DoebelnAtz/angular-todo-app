@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Task } from '../../../shared/models/task.model';
+import { TaskService } from '../../../shared/services/task.service';
+import { UserService } from '../../../shared/services/user.service';
 
 @Component({
 	selector: 'app-task-card',
@@ -9,7 +11,16 @@ import { Task } from '../../../shared/models/task.model';
 export class TaskCardComponent implements OnInit {
 	@Input() task: Task | undefined;
 
-	constructor() {}
+	constructor(
+		private taskService: TaskService,
+		private userService: UserService
+	) {}
+
+	onTaskDeleteClick() {
+		console.log(this.userService.uid);
+		if (this.userService.uid && this.task?.name)
+			this.taskService.deleteTask(this.userService.uid, this.task.name);
+	}
 
 	ngOnInit(): void {}
 }

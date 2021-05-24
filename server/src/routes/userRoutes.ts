@@ -25,8 +25,8 @@ userRouter.post(
   createTask
 );
 
-userRouter.patch("/", updateUser);
-
 userRouter.delete("/tasks", deleteTask);
+
+userRouter.patch("/", updateUser);
 
 export default userRouter;

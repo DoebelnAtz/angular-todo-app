@@ -1,4 +1,4 @@
-<div>
 <app-add-task></app-add-task>
+<div id='task-list'>
 <app-task-card *ngFor="let task of taskService.tasks" [task]='task'></app-task-card>
 </div>

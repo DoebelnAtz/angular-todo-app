@@ -29,8 +29,20 @@ export class TaskService extends ApiService {
 		this.post('/users/tasks', {
 			name: name,
 			uid: uid,
-		}).subscribe((resp: any) => {
+		}).subscribe((resp: Task) => {
 			this.tasks.push(resp);
 		});
+	}
+
+	deleteTask(uid: string, name: string) {
+		this.delete('/users/tasks', {
+			name: name,
+			uid: uid,
+		}).subscribe(
+			() => {
+				this.tasks.filter((task) => task.name !== name);
+			},
+			(error: any) => {}
+		);
 	}
 }

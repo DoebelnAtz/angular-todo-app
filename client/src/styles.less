@@ -1,5 +1,105 @@
 @bgColor: pink;
 
+/**
+	base units for margin, padding and radius
+ */
+
+@ms: 14px;
+@mm: 20px;
+@ml: 28px;
+
+@ps: 8px;
+@pm: 18px;
+@pl: 30px;
+
+@rs: 6px;
+@rm: 12px;
+@rl: 20px;
+
+/**
+	base colors
+ */
+@bg100: #C8CDE4;
+@bg200: #8391C3;
+@bg300: #495A97;
+@bg400: #212945;
+@bg500: #14192A;
+@bg700: #07090F;
+
+@primary: #007090;
+
+@danger: #ED6A5A;
+
+@text: #C7EDE4;
+
+/**
+	fonts
+ */
+
+@logoFont: 'Pacifico', cursive;
+
+@textFont: 'Montserrat', sans-serif;
+
+/**
+	global classes
+ */
+
+.flex {
+	display: flex;
+}
+
+.flex-col {
+	.flex();
+	flex-direction: column;
+}
+
+.container {
+	width: 100%;
+	box-sizing: border-box;
+	.flex();
+}
+
+.input {
+	border-radius: @rs;
+	padding: @ps;
+	border: none;
+	background-color: @bg100;
+	font-size: 18px;
+	font: @textFont;
+	flex-shrink: 1;
+	&:focus {
+		outline: none;
+	}
+
+}
+
+.button {
+	background-color: @bg100;
+	color: @bg700;
+	font-size: 18px;
+	padding: @ps @pl;
+	box-shadow: none;
+	border: none;
+	border-radius: @rs;
+	cursor: pointer;
+	transition: background-color 0.1s ease-in-out;
+	&:focus {
+		outline: none;
+	}
+	&:hover {
+		background-color: @bg200;
+	}
+	&:disabled {
+		color: @bg300;
+		background-color: @bg100;
+		cursor: not-allowed;
+	}
+}
+
+/**
+	global rules
+ */
+
 html { height: 100%}
 body {
 	margin: 0;

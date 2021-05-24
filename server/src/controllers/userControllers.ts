@@ -86,6 +86,7 @@ export const createTask = catchErrors(async (req, res) => {
 
 export const deleteTask = catchErrors(async (req, res) => {
   const { uid, name } = req.body;
+  console.log(uid, name);
   let userDoc = await db.collection("users").doc(uid);
 
   let doc = await userDoc.get();
