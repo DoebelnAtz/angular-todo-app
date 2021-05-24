@@ -105,7 +105,7 @@ export const deleteTask = catchErrors(async (req, res) => {
         name: name,
       }),
     });
-    return res.status(201).json({ name });
+    return res.status(200).json({ name });
   } else {
     throw new CustomError(
       "Failed to find user with provided id",

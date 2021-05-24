@@ -8,7 +8,7 @@ import { UserService } from '../../../shared/services/user.service';
 	templateUrl: './task-card.component.html',
 	styleUrls: ['./task-card.component.less'],
 })
-export class TaskCardComponent implements OnInit {
+export class TaskCardComponent {
 	@Input() task: Task | undefined;
 
 	constructor(
@@ -21,6 +21,4 @@ export class TaskCardComponent implements OnInit {
 		if (this.userService.uid && this.task?.name)
 			this.taskService.deleteTask(this.userService.uid, this.task.name);
 	}
-
-	ngOnInit(): void {}
 }

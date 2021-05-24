@@ -35,14 +35,14 @@ export class TaskService extends ApiService {
 	}
 
 	deleteTask(uid: string, name: string) {
+		this.tasks = this.tasks.filter((task) => task.name !== name);
 		this.delete('/users/tasks', {
-			name: name,
-			uid: uid,
-		}).subscribe(
-			() => {
-				this.tasks.filter((task) => task.name !== name);
+			body: {
+				name: name,
+				uid: uid,
 			},
-			(error: any) => {}
-		);
+		}).subscribe(() => {
+			console.log(`Deleted: ${name}`);
+		});
 	}
 }

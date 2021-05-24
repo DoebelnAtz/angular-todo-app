@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TaskService } from '../../shared/services/task.service';
-import { User } from '../../shared/models/user.model';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../shared/services/user.service';
-import { Task } from '../../shared/models/task.model';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
 	selector: 'app-tasks',
@@ -24,6 +23,14 @@ export class TasksComponent implements OnInit {
 		console.log(this.userService);
 		if (!!this.userService.uid)
 			this.taskService.getTasks(this.userService.uid);
+	}
+
+	drop(event: CdkDragDrop<string[]>) {
+		moveItemInArray(
+			this.taskService.tasks,
+			event.previousIndex,
+			event.currentIndex
+		);
 	}
 
 	ngOnDestroy() {

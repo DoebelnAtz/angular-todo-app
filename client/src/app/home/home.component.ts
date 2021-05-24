@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TaskService } from '../shared/services/task.service';
-import { Observable, Observer, Subscription } from 'rxjs';
 import { UserService } from '../shared/services/user.service';
-import { concatMap, tap } from 'rxjs/operators';
-import firebase from 'firebase';
-import UserInfo = firebase.UserInfo;
 import { User } from '../shared/models/user.model';
 
 @Component({

@@ -20,6 +20,7 @@ import { AddTaskComponent } from './home/tasks/add-task/add-task.component';
 import { FormsModule } from '@angular/forms';
 import { TaskCardComponent } from './home/tasks/task-card/task-card.component';
 import { HeaderComponent } from './home/header/header.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 const routes: Routes = [
 	{ path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -46,6 +47,7 @@ const routes: Routes = [
 		AngularFirestoreModule,
 		FormsModule,
 		HttpClientModule,
+		DragDropModule,
 	],
 	providers: [TaskService, UserService, ApiService],
 	bootstrap: [AppComponent],
