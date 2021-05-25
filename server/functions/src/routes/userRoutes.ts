@@ -1,4 +1,4 @@
-import express from "express";
+import { Router } from "express";
 import { check } from "express-validator";
 
 import {
@@ -10,7 +10,7 @@ import {
   updateUserTaskList,
 } from "../controllers/userControllers";
 
-const userRouter = express.Router();
+const userRouter = Router();
 
 userRouter.patch("/", updateUser);
 

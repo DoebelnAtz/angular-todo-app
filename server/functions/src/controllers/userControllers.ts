@@ -1,7 +1,6 @@
 import { catchErrors } from "../errors/catchErrors";
 import { db } from "../db";
 import CustomError from "../errors/customError";
-import admin from "firebase-admin";
 import { firestore } from "firebase-admin/lib/firestore";
 
 export const updateUser = catchErrors(async (req, res) => {
@@ -30,7 +29,7 @@ export const getUserTasks = catchErrors(async (req, res) => {
   let doc = await userDoc.get();
 
   if (doc.exists) {
-    let tasks = doc.data().tasks;
+    let tasks = doc.data()?.tasks;
     let response = Object.keys(tasks).map((t) => ({ name: t, ...tasks[t] }));
     let sortedResponse = response.sort((a, b) => {
       if (a.i < b.i) {
@@ -60,7 +59,7 @@ export const createTask = catchErrors(async (req, res) => {
   let doc = await userDoc.get();
   if (doc.exists) {
     let user = doc.data();
-    if (!(user.tasks[name] === undefined)) {
+    if (!(user?.tasks[name] === undefined) || !user) {
       throw new CustomError(
         "Failed to create task",
         409,
@@ -92,7 +91,7 @@ export const deleteTask = catchErrors(async (req, res) => {
   let doc = await userDoc.get();
   if (doc.exists) {
     const user = doc.data();
-    if (user.tasks[name] === undefined) {
+    if (user?.tasks[name] === undefined) {
       throw new CustomError(
         "Failed to delete task",
         400,
@@ -127,12 +126,19 @@ export const updateUserTaskList = catchErrors(async (req, res) => {
   let doc = await userDoc.get();
   if (doc.exists) {
     let user = doc.data();
-
     let taskMap = {};
-    tasks.forEach((t) => {
+    if (!user) {
+      throw new CustomError(
+        "Failed to find user with provided id",
+        404,
+        `Did not find a user matching id: ${uid}`,
+        "Failed to create task"
+      );
+    }
+    tasks.forEach((t: { name: string; checked: boolean; i: number }) => {
+      // @ts-ignore
       taskMap[t.name] = { checked: t.checked, i: t.i };
     });
-
     user.tasks = taskMap;
     userDoc.set(user);
     return res.status(201).json({ tasks });
@@ -154,7 +160,7 @@ export const setTaskChecked = catchErrors(async (req, res) => {
   let doc = await userDoc.get();
   if (doc.exists) {
     const user = doc.data();
-    if (user.tasks[name] === undefined) {
+    if (user?.tasks[name] === undefined) {
       throw new CustomError(
         "Failed to check task",
         400,
