@@ -8,13 +8,17 @@
 	flex-direction: column;
 }
 
-#task-container {
+.task-container {
 	padding: @pl;
 	width: calc(100% - @ml * 2);
 	box-sizing: border-box;
-	margin: @ml @ml auto @ml;
+	color: @text;
+	font-family: @textFont;
+	margin: @ml @ml @ml @ml;
 	border-radius: @rm;
 	background-color: @bg500;
+	max-height: 600px;
+	overflow-y: hidden;
 	@media(min-width: @tablet) {
 		width: 50%;
 		margin: @ml auto auto auto;

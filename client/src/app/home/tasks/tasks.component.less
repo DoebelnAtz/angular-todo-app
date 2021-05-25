@@ -3,11 +3,17 @@
 #task-list {
 	.flex-col();
 	width: 100%;
-	margin-top: @mm;
+	margin-top: @ml;
+	flex-shrink: 1;
+	height: calc(100% - 41px - @ml);
+	overflow-y: auto;
+	scroll-snap-type: y mandatory;
+
 }
 
 .app-task-card {
 	margin-bottom: @mm;
+	scroll-snap-align: start;
 	&:last-child {
 		margin-bottom: 0;
 	}

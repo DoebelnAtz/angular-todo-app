@@ -47,7 +47,7 @@ const routes: Routes = [
 		HttpClientModule,
 		DragDropModule,
 	],
-	providers: [TaskService, UserService, ApiService],
+	providers: [],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}

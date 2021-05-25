@@ -3,6 +3,7 @@ import { ApiService } from './api.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Task } from '../models/task.model';
+import { timeout } from 'rxjs/operators';
 
 @Injectable({
 	providedIn: 'root',
@@ -13,6 +14,9 @@ export class TaskService extends ApiService {
 	constructor(http: HttpClient) {
 		super(http);
 		this.tasks = [];
+		setTimeout(() => {
+			this.setError('test2');
+		}, 2000);
 	}
 
 	getTasks(uid: string) {
@@ -29,9 +33,14 @@ export class TaskService extends ApiService {
 		this.post('/users/tasks', {
 			name: name,
 			uid: uid,
-		}).subscribe((resp: Task) => {
-			this.tasks.push(resp);
-		});
+		}).subscribe(
+			(resp: Task) => {
+				this.tasks.push(resp);
+			},
+			() => {
+				this.setError('test');
+			}
+		);
 	}
 
 	deleteTask(uid: string, name: string) {

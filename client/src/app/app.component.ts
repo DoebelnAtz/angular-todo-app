@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 // Firebase App (the core Firebase SDK) is always required and must be listed first
 import firebase from 'firebase/app';
 // If you are using v7 or any earlier version of the JS SDK, you should import firebase using namespace import
@@ -10,10 +10,15 @@ import 'firebase/analytics';
 // Add the Firebase products that you want to use
 import 'firebase/auth';
 import 'firebase/firestore';
+import { ApiService } from './shared/services/api.service';
+import { Subscription } from 'rxjs';
+import { take, tap } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.less'],
 })
-export class AppComponent {}
+export class AppComponent {
+	constructor() {}
+}
