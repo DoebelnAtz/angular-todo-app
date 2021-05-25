@@ -1,0 +1,32 @@
+@import "~src/styles";
+
+#add-task-container {
+	width: 100%;
+	display: flex;
+}
+
+#add-task-input {
+	.input();
+	border-radius: @rs 0 0 @rs;
+	border-right: 2px solid @bg200;
+}
+
+#add-task-button {
+	.button();
+	.icon-add();
+	background-size: 30px;
+	background-position: center;
+	border-radius: 0 @rs @rs 0;
+}
+
+#edit-tasks-button {
+	.button();
+	background-size: 30px;
+	background-position: center;
+	&.edit {
+		.icon-edit()
+	}
+	&.cancel {
+		.icon-cancel()
+	}
+}

@@ -6,9 +6,12 @@ import {
   getUserTasks,
   createTask,
   deleteTask,
+  setTaskChecked,
 } from "../controllers/userControllers";
 
 const userRouter = express.Router();
+
+userRouter.patch("/", updateUser);
 
 userRouter.get(
   "/tasks",
@@ -25,8 +28,8 @@ userRouter.post(
   createTask
 );
 
-userRouter.delete("/tasks", deleteTask);
+userRouter.put("/tasks", setTaskChecked);
 
-userRouter.patch("/", updateUser);
+userRouter.delete("/tasks", deleteTask);
 
 export default userRouter;

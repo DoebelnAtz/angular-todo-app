@@ -35,7 +35,6 @@ export class UserService extends ApiService {
 					observer.next(userObj);
 					this.uid = user.uid;
 					localStorage.setItem('user', JSON.stringify(user));
-					this.PatchUser(userObj);
 				} else {
 					observer.next({} as User);
 					localStorage.setItem('user', '{}');
@@ -44,10 +43,8 @@ export class UserService extends ApiService {
 		});
 	}
 
-	PatchUser(user: User) {
-		this.patch('/users', user).subscribe((resp: any) => {
-			console.log(resp);
-		});
+	async PatchUser(user: User) {
+		return this.patch('/users', user).toPromise();
 	}
 
 	async GoogleAuth() {
@@ -59,7 +56,17 @@ export class UserService extends ApiService {
 			.signInAnonymously()
 			.then((res) => {
 				console.log(res);
-				this.router.navigate(['/']);
+				if (res.user) {
+					let userObj = {
+						uid: res.user.uid,
+						isAnonymous: res.user.isAnonymous,
+					};
+					this.PatchUser(userObj).then(() => {
+						this.ngZone.run(() => {
+							this.router.navigate(['/']);
+						});
+					});
+				}
 			})
 			.catch((error: ErrorEvent) => {});
 	}
@@ -68,11 +75,19 @@ export class UserService extends ApiService {
 	AuthLogin(provider: AuthProvider) {
 		return this.afAuth
 			.signInWithPopup(provider)
-			.then((result) => {
-				console.log(result);
-				this.ngZone.run(() => {
-					this.router.navigate(['/']);
-				});
+			.then((res) => {
+				console.log(res);
+				if (res.user) {
+					let userObj = {
+						uid: res.user.uid,
+						isAnonymous: res.user.isAnonymous,
+					};
+					this.PatchUser(userObj).then(() => {
+						this.ngZone.run(() => {
+							this.router.navigate(['/']);
+						});
+					});
+				}
 			})
 			.catch((error) => {
 				window.alert(error);

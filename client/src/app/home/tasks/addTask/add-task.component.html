@@ -1,0 +1,15 @@
+<div class="container">
+	<input
+		id="add-task-input"
+		type="text"
+		placeholder="add task"
+		(keydown)="onTaskNameInputEnter($event)"
+		[(ngModel)]="taskName"
+	/>
+	<button
+		id="add-task-button"
+		(click)="onAddTaskClick()"
+		[disabled]="!taskName.length"
+	></button>
+	<button id="edit-tasks-button" (click)="onEditTaskClick()">click</button>
+</div>

@@ -16,9 +16,9 @@ import { TaskService } from './shared/services/task.service';
 import { UserService } from './shared/services/user.service';
 import { ApiService } from './shared/services/api.service';
 import { TasksComponent } from './home/tasks/tasks.component';
-import { AddTaskComponent } from './home/tasks/add-task/add-task.component';
+import { AddTaskComponent } from './home/tasks/addTask/add-task.component';
 import { FormsModule } from '@angular/forms';
-import { TaskCardComponent } from './home/tasks/task-card/task-card.component';
+import { TaskCardComponent } from './home/tasks/taskCard/task-card.component';
 import { HeaderComponent } from './home/header/header.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 

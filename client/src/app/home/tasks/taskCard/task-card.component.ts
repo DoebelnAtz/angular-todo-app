@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Task } from '../../../shared/models/task.model';
 import { TaskService } from '../../../shared/services/task.service';
 import { UserService } from '../../../shared/services/user.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
 	selector: 'app-task-card',
@@ -10,15 +11,26 @@ import { UserService } from '../../../shared/services/user.service';
 })
 export class TaskCardComponent {
 	@Input() task: Task | undefined;
+	@Input() editing: boolean = true;
 
 	constructor(
 		private taskService: TaskService,
 		private userService: UserService
 	) {}
 
-	onTaskDeleteClick() {
+	onTaskOptionClick() {
 		console.log(this.userService.uid);
 		if (this.userService.uid && this.task?.name)
-			this.taskService.deleteTask(this.userService.uid, this.task.name);
+			if (this.editing) {
+				this.taskService.deleteTask(
+					this.userService.uid,
+					this.task.name
+				);
+			} else {
+				this.taskService.checkTask(
+					this.userService.uid,
+					this.task.name
+				);
+			}
 	}
 }

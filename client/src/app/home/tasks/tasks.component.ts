@@ -11,12 +11,15 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 })
 export class TasksComponent implements OnInit {
 	private subscriptions: Subscription[] = [];
-	uid: string | undefined;
-
+	editing = false;
 	constructor(
 		public taskService: TaskService,
 		private userService: UserService
 	) {}
+
+	onEditChange(isEditing: boolean) {
+		this.editing = isEditing;
+	}
 
 	ngOnInit() {
 		// Load the current user's data

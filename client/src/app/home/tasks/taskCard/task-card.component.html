@@ -1,0 +1,11 @@
+<div class="task-card-container">
+	<span class="task-card-name">{{ task?.name }}</span>
+	<div
+		(click)="onTaskOptionClick()"
+		[ngClass]="[
+			editing ? 'option-delete' : 'option-done',
+			task?.checked ? 'checked' : 'unchecked'
+		]"
+		class="option-div"
+	></div>
+</div>

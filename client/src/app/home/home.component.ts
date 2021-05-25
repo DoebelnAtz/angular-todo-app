@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { TaskService } from '../shared/services/task.service';
 import { UserService } from '../shared/services/user.service';
 import { User } from '../shared/models/user.model';
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'app-home',
@@ -11,18 +10,19 @@ import { User } from '../shared/models/user.model';
 })
 export class HomeComponent implements OnInit {
 	user: User | undefined;
+	private subscriptions: Subscription[] = [];
 
-	constructor(
-		private todoService: TaskService,
-		public userService: UserService,
-		private route: ActivatedRoute
-	) {}
+	constructor(public userService: UserService) {}
 
 	ngOnInit() {
-		this.userService.user.subscribe((userData) => {
-			this.user = userData;
-		});
+		this.subscriptions.push(
+			this.userService.user.subscribe((userData) => {
+				this.user = userData;
+			})
+		);
 	}
 
-	ngOnDestroy() {}
+	ngOnDestroy() {
+		this.subscriptions.forEach((sub) => sub.unsubscribe());
+	}
 }

@@ -45,4 +45,14 @@ export class TaskService extends ApiService {
 			console.log(`Deleted: ${name}`);
 		});
 	}
+
+	checkTask(uid: string, name: string) {
+		console.log(this.tasks, name);
+		this.tasks = this.tasks.map((task) => {
+			if (task.name === name) {
+				task.checked = !task.checked;
+			}
+			return task;
+		});
+	}
 }

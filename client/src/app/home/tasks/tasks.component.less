@@ -31,6 +31,26 @@
 	border: none;
 }
 
-.task-list.cdk-drop-list-dragging .app-task-card:not(.cdk-drag-placeholder) {
+.no-tasks-card-container {
+	.container();
+	background-color: @bg400;
+	margin-top: @mm;
+	border-radius: @rs;
+	height: 54px;
+	&:hover .delete-div {
+		width: 60px;
+	}
+}
+
+.no-tasks-card-name {
+	font-family: @textFont;
+	color: @text;
+	flex-shrink: 1;
+	margin: auto auto auto @mm;
+	font-size: 18px;
+	letter-spacing: 1.5px;
+}
+
+#task-list.cdk-drop-list-dragging .app-task-card:not(.cdk-drag-placeholder) {
 	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }

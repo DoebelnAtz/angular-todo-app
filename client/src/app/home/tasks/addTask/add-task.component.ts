@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { TaskService } from '../../../shared/services/task.service';
 import { markIgnoreDiagnostics } from '@angular/compiler-cli/src/ngtsc/typecheck/src/comments';
 import { UserService } from '../../../shared/services/user.service';
@@ -11,6 +11,8 @@ import { User } from '../../../shared/models/user.model';
 	styleUrls: ['./add-task.component.less'],
 })
 export class AddTaskComponent implements OnInit {
+	@Output() editEvent = new EventEmitter<boolean>();
+	isEditing = false;
 	taskName: string = '';
 	private subscriptions: Subscription[] = [];
 
@@ -18,6 +20,11 @@ export class AddTaskComponent implements OnInit {
 		private taskService: TaskService,
 		private userService: UserService
 	) {}
+
+	onEditTaskClick() {
+		this.isEditing = !this.isEditing;
+		this.editEvent.emit(this.isEditing);
+	}
 
 	onAddTaskClick() {
 		this.addTask();

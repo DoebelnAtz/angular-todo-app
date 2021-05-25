@@ -1,6 +1,23 @@
 @bgColor: pink;
 
 /**
+	icon paths
+ */
+
+@iconpath: 'assets/icons/';
+
+.icon (@icon) {
+	background: no-repeat url('@{iconpath}@{icon}');
+}
+
+.icon-del { .icon('remove_circle_white.svg') }
+.icon-check { .icon('check_white.svg') }
+.icon-uncheck { .icon('circle_white.svg') }
+.icon-cancel { .icon('close_white.svg') }
+.icon-edit { .icon('edit_white.svg') }
+.icon-add { .icon('add_white.svg') }
+
+/**
 	base units for margin, padding and radius
  */
 
@@ -19,12 +36,14 @@
 /**
 	base colors
  */
-@bg100: #C8CDE4;
-@bg200: #8391C3;
-@bg300: #495A97;
-@bg400: #212945;
-@bg500: #14192A;
-@bg700: #07090F;
+
+@bg100: #D8DDF4;
+@bg200: #C8CDE4;
+@bg300: #8391C3;
+@bg400: #495A97;
+@bg500: #212945;
+@bg700: #14192A;
+@bg800: #07090F;
 
 @primary: #007090;
 
