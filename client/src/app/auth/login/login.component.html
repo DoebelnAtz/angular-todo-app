@@ -1,3 +1,14 @@
-<button (click)="onGoogleLogin()">login with google</button>
-<button (click)="onAnonymousLogin()">login anonymously</button>
+<div id="login-container">
+	<div id="login-header">
+		<span id="login-logo">Todo</span>
+	</div>
 
+	<div id="login-auth-container">
+		<button id="login-google" (click)="onGoogleLogin()">
+			log in with google
+		</button>
+		<button id="login-anon" (click)="onAnonymousLogin()">
+			log in anonymously
+		</button>
+	</div>
+</div>

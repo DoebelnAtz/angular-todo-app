@@ -1,11 +1,9 @@
-<div class='home'>
-<app-header></app-header>
-	<div id='task-container'>
-
-<div *ngIf='(userService.user | async); else loadingTemplate'>
-	<app-tasks ></app-tasks>
-</div>
-<ng-template #loadingTemplate>Loading...</ng-template>
+<div class="home">
+	<app-header></app-header>
+	<div id="task-container">
+		<div *ngIf="userService.user | async; else loadingTemplate">
+			<app-tasks></app-tasks>
+		</div>
+		<ng-template #loadingTemplate>Loading...</ng-template>
 	</div>
-<a [routerLink]="['/login']">to login</a>
 </div>

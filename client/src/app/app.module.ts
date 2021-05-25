@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { SignupComponent } from './auth/signup/signup.component';
 import { AuthGuard } from './shared/guard/auth.guard';
 import { HttpClientModule } from '@angular/common/http';
 import { TaskService } from './shared/services/task.service';
@@ -32,7 +31,6 @@ const routes: Routes = [
 		AppComponent,
 		LoginComponent,
 		HomeComponent,
-		SignupComponent,
 		TasksComponent,
 		AddTaskComponent,
 		TaskCardComponent,
