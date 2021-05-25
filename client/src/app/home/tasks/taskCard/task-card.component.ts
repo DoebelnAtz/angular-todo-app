@@ -18,7 +18,7 @@ export class TaskCardComponent {
 		private userService: UserService
 	) {}
 
-	onTaskOptionClick() {
+	onTaskDeleteClick() {
 		console.log(this.userService.uid);
 		if (this.userService.uid && this.task?.name)
 			if (this.editing) {
@@ -26,11 +26,11 @@ export class TaskCardComponent {
 					this.userService.uid,
 					this.task.name
 				);
-			} else {
-				this.taskService.checkTask(
-					this.userService.uid,
-					this.task.name
-				);
 			}
+	}
+	onTaskOptionClick() {
+		console.log(this.userService.uid);
+		if (this.userService.uid && this.task?.name)
+			this.taskService.checkTask(this.userService.uid, this.task.name);
 	}
 }

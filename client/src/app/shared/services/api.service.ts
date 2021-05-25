@@ -49,6 +49,26 @@ export class ApiService {
 		});
 	}
 
+	put<T>(endpoint: string, data: any, ...args: any[]) {
+		let response = this.http.put<Response & T>(
+			`${environment.url}${endpoint}`,
+			data,
+			...args
+		);
+
+		return Observable.create((observer: Observer<T>) => {
+			response.subscribe(
+				(res) => {
+					observer.next(res);
+					observer.complete();
+				},
+				(error) => {
+					observer.error([error]);
+				}
+			);
+		});
+	}
+
 	get<T>(endpoint: string, ...args: any[]) {
 		let response = this.http.get<Response & T>(
 			`${environment.url}${endpoint}`,

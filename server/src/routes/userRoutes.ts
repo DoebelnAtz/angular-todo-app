@@ -7,6 +7,7 @@ import {
   createTask,
   deleteTask,
   setTaskChecked,
+  updateUserTaskList,
 } from "../controllers/userControllers";
 
 const userRouter = express.Router();
@@ -27,6 +28,8 @@ userRouter.post(
   ],
   createTask
 );
+
+userRouter.patch("/tasks", updateUserTaskList);
 
 userRouter.put("/tasks", setTaskChecked);
 

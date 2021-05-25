@@ -7,7 +7,7 @@
 @iconpath: 'assets/icons/';
 
 .icon (@icon) {
-	background: no-repeat url('@{iconpath}@{icon}');
+	background:url('@{iconpath}@{icon}');
 }
 
 .icon-del { .icon('remove_circle_white.svg') }
@@ -33,17 +33,22 @@
 @rm: 12px;
 @rl: 20px;
 
+@mobile: 370px;
+@tablet: 720px;
+
 /**
 	base colors
  */
 
-@bg100: #D8DDF4;
-@bg200: #C8CDE4;
+@bg100: #E4E6F2;
+@bg200: #C8CCE4;
 @bg300: #8391C3;
 @bg400: #495A97;
-@bg500: #212945;
-@bg700: #14192A;
-@bg800: #07090F;
+@bg500: #30375F;
+@bg600: #292F51;
+@bg700: #222744;
+@bg800: #1B1F36;
+@bg900: #07090F;
 
 @primary: #007090;
 
@@ -80,12 +85,15 @@
 
 .input {
 	border-radius: @rs;
-	padding: @ps;
+	padding: 10px @pm;
 	border: none;
-	background-color: @bg100;
+	color: @text;
+	background-color: @bg700;
 	font-size: 18px;
 	font: @textFont;
 	flex-shrink: 1;
+	flex-grow: 1;
+	min-width: 100px;
 	&:focus {
 		outline: none;
 	}
@@ -93,7 +101,7 @@
 }
 
 .button {
-	background-color: @bg100;
+	background-color: @bg700;
 	color: @bg700;
 	font-size: 18px;
 	padding: @ps @pl;
@@ -106,11 +114,11 @@
 		outline: none;
 	}
 	&:hover {
-		background-color: @bg200;
+		background-color: @bg600;
 	}
 	&:disabled {
 		color: @bg300;
-		background-color: @bg100;
+		background-color: @bg600;
 		cursor: not-allowed;
 	}
 }

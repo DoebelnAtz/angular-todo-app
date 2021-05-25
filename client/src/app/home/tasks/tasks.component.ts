@@ -29,11 +29,19 @@ export class TasksComponent implements OnInit {
 	}
 
 	drop(event: CdkDragDrop<string[]>) {
+		let data = event.item.data;
 		moveItemInArray(
 			this.taskService.tasks,
 			event.previousIndex,
 			event.currentIndex
 		);
+		this.taskService.tasks = this.taskService.tasks.map((t, i) => ({
+			...t,
+			i: i,
+		}));
+		this.userService.uid &&
+			this.taskService.updateTasks(this.userService.uid);
+		console.log(this.taskService.tasks);
 	}
 
 	ngOnDestroy() {

@@ -57,6 +57,8 @@ export class UserService extends ApiService {
 			.then((res) => {
 				console.log(res);
 				if (res.user) {
+					localStorage.setItem('user', JSON.stringify(res.user));
+
 					let userObj = {
 						uid: res.user.uid,
 						isAnonymous: res.user.isAnonymous,
@@ -78,6 +80,8 @@ export class UserService extends ApiService {
 			.then((res) => {
 				console.log(res);
 				if (res.user) {
+					localStorage.setItem('user', JSON.stringify(res.user));
+
 					let userObj = {
 						uid: res.user.uid,
 						isAnonymous: res.user.isAnonymous,
@@ -95,6 +99,7 @@ export class UserService extends ApiService {
 	}
 
 	Logout() {
+		localStorage.setItem('user', '{}');
 		this.afAuth.signOut().then(() => {
 			this.router.navigate(['/']);
 		});

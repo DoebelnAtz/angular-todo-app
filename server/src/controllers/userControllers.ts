@@ -30,12 +30,19 @@ export const getUserTasks = catchErrors(async (req, res) => {
   let doc = await userDoc.get();
 
   if (doc.exists) {
-    console.log(doc.data());
     let tasks = doc.data().tasks;
-    console.log();
-    return res.json(
-      Object.keys(tasks).map((t) => ({ name: t, checked: tasks[t] }))
-    );
+    let response = Object.keys(tasks).map((t) => ({ name: t, ...tasks[t] }));
+    let sortedResponse = response.sort((a, b) => {
+      if (a.i < b.i) {
+        return -1;
+      }
+      if (a.i > b.i) {
+        return 1;
+      }
+      return 0;
+    });
+    console.log(response, sortedResponse);
+    return res.json(sortedResponse);
   } else {
     throw new CustomError(
       "Failed to find user with provided id",
@@ -62,7 +69,10 @@ export const createTask = catchErrors(async (req, res) => {
         "A task of that name already exists"
       );
     }
-    user.tasks[name] = false;
+    user.tasks[name] = {
+      checked: false,
+      i: Object.keys(user.tasks).length | 0,
+    };
     userDoc.set(user);
     return res.status(201).json({ name });
   } else {
@@ -110,6 +120,33 @@ export const deleteTask = catchErrors(async (req, res) => {
   }
 }, "Failed to delete task");
 
+export const updateUserTaskList = catchErrors(async (req, res) => {
+  const { uid, tasks } = req.body;
+
+  let userDoc = await db.collection("users").doc(uid);
+
+  let doc = await userDoc.get();
+  if (doc.exists) {
+    let user = doc.data();
+
+    let taskMap = {};
+    tasks.forEach((t) => {
+      taskMap[t.name] = { checked: t.checked, i: t.i };
+    });
+
+    user.tasks = taskMap;
+    userDoc.set(user);
+    return res.status(201).json({ tasks });
+  } else {
+    throw new CustomError(
+      "Failed to find user with provided id",
+      404,
+      `Did not find a user matching id: ${uid}`,
+      "Failed to create task"
+    );
+  }
+}, "Failed to update tasklist");
+
 export const setTaskChecked = catchErrors(async (req, res) => {
   const { uid, name } = req.body;
   console.log(uid, name);
@@ -126,7 +163,7 @@ export const setTaskChecked = catchErrors(async (req, res) => {
         "The task does not exist"
       );
     }
-    user.tasks[name] = !user.tasks[name];
+    user.tasks[name].checked = !user.tasks[name].checked;
     userDoc.set(user);
     return res.status(200).json({ name });
   } else {

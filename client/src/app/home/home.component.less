@@ -10,8 +10,13 @@
 
 #task-container {
 	padding: @pl;
+	width: calc(100% - @ml * 2);
 	box-sizing: border-box;
-	margin: @ml auto auto auto;
+	margin: @ml @ml auto @ml;
 	border-radius: @rm;
 	background-color: @bg500;
+	@media(min-width: @tablet) {
+		width: 50%;
+		margin: @ml auto auto auto;
+	}
 }

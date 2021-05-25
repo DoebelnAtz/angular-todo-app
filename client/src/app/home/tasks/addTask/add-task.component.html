@@ -2,6 +2,7 @@
 	<input
 		id="add-task-input"
 		type="text"
+		autocomplete="off"
 		placeholder="add task"
 		(keydown)="onTaskNameInputEnter($event)"
 		[(ngModel)]="taskName"
@@ -11,5 +12,9 @@
 		(click)="onAddTaskClick()"
 		[disabled]="!taskName.length"
 	></button>
-	<button id="edit-tasks-button" (click)="onEditTaskClick()">click</button>
+	<button
+		id="edit-tasks-button"
+		[ngClass]="isEditing ? 'cancel' : 'edit'"
+		(click)="onEditTaskClick()"
+	></button>
 </div>

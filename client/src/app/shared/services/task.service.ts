@@ -46,13 +46,24 @@ export class TaskService extends ApiService {
 		});
 	}
 
+	updateTasks(uid: string) {
+		this.patch('/users/tasks', {
+			uid,
+			tasks: this.tasks,
+		}).subscribe((r: any) => {
+			console.log(r);
+		});
+	}
+
 	checkTask(uid: string, name: string) {
 		console.log(this.tasks, name);
-		this.tasks = this.tasks.map((task) => {
-			if (task.name === name) {
-				task.checked = !task.checked;
-			}
-			return task;
+		this.put('/users/tasks', { uid, name }).subscribe((r: any) => {
+			this.tasks = this.tasks.map((task) => {
+				if (task.name === name) {
+					task.checked = !task.checked;
+				}
+				return task;
+			});
 		});
 	}
 }

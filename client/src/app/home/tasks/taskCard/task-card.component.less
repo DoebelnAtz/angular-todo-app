@@ -5,9 +5,9 @@
 	background-color: @bg400;
 	border-radius: @rs;
 	height: 54px;
-	//&:hover .delete-div {
-	//	width: 60px;
-	//}
+	&:not(.editing-task) {
+		cursor: pointer;
+	}
 }
 
 .task-card-name {
@@ -23,27 +23,41 @@
 	width: 60px;
 	height: 100%;
 	transition: background-color 0.2s ease-in-out;
-	background-position: center!important;
-	background-size: 30px!important;
+
 	border-radius: @rs;
 	&:hover {
 		cursor: pointer;
 	}
-}
-
-.option-done {
-	background-color: @bg400;
-	transition: all 0.2s ease-in-out;
-	&.checked {
-		.icon-check();
+	&.option-done {
+		background-color: @bg400;
+		transition: all 0.2s ease-in-out;
+		&.checked {
+			.icon-check();
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: 30px;
+		}
+		&.unchecked {
+			.icon-uncheck();
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: 30px;
+		}
 	}
-	&.unchecked {
-		.icon-uncheck();
+	&.option-delete {
+		.icon-del();
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: 30px;
+		transition: all 0.2s ease-in-out;
+		background-color: @danger;
+		opacity: 0.9;
+		&:hover {
+			background-color: @danger;
+			opacity: 1;
+		}
 	}
 }
 
-.option-delete {
-	.icon-del();
-	background-color: @danger;
 
-}
+

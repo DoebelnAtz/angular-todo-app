@@ -8,25 +8,37 @@
 #add-task-input {
 	.input();
 	border-radius: @rs 0 0 @rs;
-	border-right: 2px solid @bg200;
+	border-right: 2px solid @bg600;
 }
 
 #add-task-button {
-	.button();
 	.icon-add();
-	background-size: 30px;
+	.button();
 	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 30px;
+	transition: background-color 0.2s ease-in-out;
 	border-radius: 0 @rs @rs 0;
+
 }
 
 #edit-tasks-button {
 	.button();
+	transition: all 0.2s ease-in-out;
+	margin-left: @mm;
 	background-size: 30px;
-	background-position: center;
 	&.edit {
-		.icon-edit()
+		.icon-edit();
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: 30px;
+		background-color: @bg700;
 	}
 	&.cancel {
-		.icon-cancel()
+		.icon-cancel();
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: 30px;
+		background-color: @bg700;
 	}
 }

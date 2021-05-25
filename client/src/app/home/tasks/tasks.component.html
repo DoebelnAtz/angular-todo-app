@@ -11,6 +11,7 @@
 		cdkDrag
 		cdkDragLockAxis="y"
 		*ngFor="let task of taskService.tasks"
+		[cdkDragData]="task"
 		[task]="task"
 		[editing]="editing"
 	></app-task-card>
