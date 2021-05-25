@@ -1,6 +1,12 @@
 <div class="home">
 	<app-header></app-header>
 	<div
+		[ngClass]="errorMessage ? 'error-visible' : 'error-hidden'"
+		id="error-banner"
+	>
+		{{ errorMessage }}
+	</div>
+	<div
 		class="task-container"
 		*ngIf="userService.user | async; else loadingTemplate"
 	>
@@ -9,5 +15,4 @@
 	<ng-template #loadingTemplate>
 		<div class="task-container">...loading</div>
 	</ng-template>
-	<button (click)="apiService.setError('err')">click</button>
 </div>

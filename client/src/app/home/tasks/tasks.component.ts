@@ -3,6 +3,7 @@ import { TaskService } from '../../shared/services/task.service';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../shared/services/user.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ApiService } from '../../shared/services/api.service';
 
 @Component({
 	selector: 'app-tasks',
@@ -13,6 +14,7 @@ export class TasksComponent implements OnInit {
 	private subscriptions: Subscription[] = [];
 	editing = false;
 	constructor(
+		private apiService: ApiService,
 		public taskService: TaskService,
 		private userService: UserService
 	) {}
@@ -22,10 +24,9 @@ export class TasksComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		// Load the current user's data
-		console.log(this.userService);
-		if (!!this.userService.uid)
+		if (!!this.userService.uid) {
 			this.taskService.getTasks(this.userService.uid);
+		}
 	}
 
 	drop(event: CdkDragDrop<string[]>) {
@@ -41,7 +42,6 @@ export class TasksComponent implements OnInit {
 		}));
 		this.userService.uid &&
 			this.taskService.updateTasks(this.userService.uid);
-		console.log(this.taskService.tasks);
 	}
 
 	ngOnDestroy() {

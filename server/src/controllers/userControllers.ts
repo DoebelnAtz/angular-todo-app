@@ -28,12 +28,7 @@ export const getUserTasks = catchErrors(async (req, res) => {
   let userDoc = await db.collection("users").doc(uid);
 
   let doc = await userDoc.get();
-  throw new CustomError(
-    "Failed to find user with provided id",
-    500,
-    `Did not find a user matching id: ${uid}`,
-    "Failed to get tasks"
-  );
+
   if (doc.exists) {
     let tasks = doc.data().tasks;
     let response = Object.keys(tasks).map((t) => ({ name: t, ...tasks[t] }));
@@ -60,12 +55,6 @@ export const getUserTasks = catchErrors(async (req, res) => {
 
 export const createTask = catchErrors(async (req, res) => {
   const { uid, name } = req.body;
-  throw new CustomError(
-    "Failed to find user with provided id",
-    500,
-    `Did not find a user matching id: ${uid}`,
-    "Failed to get tasks"
-  );
   let userDoc = await db.collection("users").doc(uid);
 
   let doc = await userDoc.get();

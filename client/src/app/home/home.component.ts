@@ -13,23 +13,22 @@ import { tap } from 'rxjs/operators';
 export class HomeComponent implements OnInit {
 	user: User | undefined;
 	private subscriptions: Subscription[] = [];
-
+	public errorMessage: string = '';
 	constructor(
-		public userService: UserService,
-		public apiService: ApiService
+		public apiService: ApiService,
+		public userService: UserService
 	) {}
 
 	getError() {
-		this.apiService.getError().subscribe((e) => console.log(e));
+		this.subscriptions.push(
+			this.apiService.getError().subscribe((error) => {
+				this.errorMessage = error;
+			})
+		);
 	}
 
 	ngOnInit() {
 		this.getError();
-		// this.subscriptions.push(
-		// 	this.userService.user.subscribe((userData) => {
-		// 		this.user = userData;
-		// 	})
-		// );
 	}
 
 	ngOnDestroy() {
