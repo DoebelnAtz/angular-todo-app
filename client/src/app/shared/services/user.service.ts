@@ -2,14 +2,13 @@ import { Injectable, NgZone } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import firebase from 'firebase/app';
+import { Observable } from 'rxjs';
 import AuthProvider = firebase.auth.AuthProvider;
+import firebase from 'firebase/app';
 import { HttpClient } from '@angular/common/http';
+
 import { ApiService } from './api.service';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../models/user.model';
-import { distinctUntilChanged } from 'rxjs/operators';
-import UserInfo = firebase.UserInfo;
 
 @Injectable({
 	providedIn: 'root',

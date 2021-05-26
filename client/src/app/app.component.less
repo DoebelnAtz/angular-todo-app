@@ -1,1 +1,21 @@
-
+@import "~src/styles";
+#offline-banner {
+	position: absolute;
+	top: 50px;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	transition: opacity 0.2s ease-in-out -0.2s;
+	padding: @ps @pl;
+	border: 2px solid @warningText;
+	background-color: @warning;
+	color: @warningText;
+	font-family: @textFont;
+	font-size: 16px;
+	border-radius: @rm;
+	&.offline-visible {
+		opacity: 1;
+	}
+	&.offline-hidden {
+		opacity: 0;
+	}
+}

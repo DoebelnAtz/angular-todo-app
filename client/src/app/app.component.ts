@@ -13,12 +13,21 @@ import 'firebase/firestore';
 import { ApiService } from './shared/services/api.service';
 import { Subscription } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
+import { WorkerService } from './shared/services/worker.service';
 
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.less'],
 })
-export class AppComponent {
-	constructor() {}
+export class AppComponent implements OnInit {
+	isOnline: boolean = true;
+
+	constructor(private serviceWorkerService: WorkerService) {}
+
+	ngOnInit() {
+		this.serviceWorkerService.isOnline$.subscribe((isOnline) => {
+			this.isOnline = isOnline;
+		});
+	}
 }

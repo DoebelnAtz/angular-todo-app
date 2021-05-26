@@ -1,9 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { TaskService } from '../../../shared/services/task.service';
-import { markIgnoreDiagnostics } from '@angular/compiler-cli/src/ngtsc/typecheck/src/comments';
-import { UserService } from '../../../shared/services/user.service';
 import { Subscription } from 'rxjs';
-import { User } from '../../../shared/models/user.model';
+
+import { TaskService } from '../../../shared/services/task.service';
+import { UserService } from '../../../shared/services/user.service';
 
 @Component({
 	selector: 'app-add-task',

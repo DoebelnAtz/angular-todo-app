@@ -1,13 +1,8 @@
 import { Injectable } from '@angular/core';
-import {
-	HttpClient,
-	HttpErrorResponse,
-	HttpSentEvent,
-} from '@angular/common/http';
+import { HttpClient, HttpSentEvent } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+
 import { environment } from '../../../environments/environment';
-import { BehaviorSubject, Observable, Observer, of, throwError } from 'rxjs';
-import { catchError, distinctUntilChanged } from 'rxjs/operators';
-import { catchErrors } from '../../../../../server/src/errors/catchErrors';
 
 @Injectable({
 	providedIn: 'root',
@@ -34,25 +29,11 @@ export class ApiService {
 	}
 
 	put<T>(endpoint: string, data: any, ...args: any[]) {
-		let response = this.http.put<Response & T>(
+		return this.http.put<Response & T>(
 			`${environment.url}${endpoint}`,
 			data,
 			...args
 		);
-
-		return Observable.create((observer: Observer<T>) => {
-			response.subscribe(
-				(res) => {
-					observer.next(res);
-					observer.complete();
-				},
-				(error) => {
-					this.handleError(error.error.message);
-
-					observer.error([error]);
-				}
-			);
-		});
 	}
 
 	get<T>(endpoint: string, ...args: any[]) {
@@ -81,8 +62,8 @@ export class ApiService {
 	}
 
 	public handleError<T>(error: any) {
-		this.e = error.error.message;
-		console.log(`From handleError: ${error.error.message}`);
+		this.e = error.error?.message || 'Something went wrong';
+		console.log(`From handleError: ${this.e}`);
 		return throwError(error.error);
 	}
 }

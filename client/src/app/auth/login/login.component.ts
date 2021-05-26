@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
+
 import { UserService } from '../../shared/services/user.service';
 
 @Component({
@@ -9,14 +10,30 @@ import { UserService } from '../../shared/services/user.service';
 	providers: [RouterLink],
 })
 export class LoginComponent implements OnInit {
-	constructor(private user: UserService, private router: Router) {}
+	googleLoading = false;
+	anonLoading = false;
+
+	constructor(private user: UserService) {}
+
+	/**
+	 *  timeout in login to give time to redirect without
+	 *  confusing flickering
+	 */
 
 	async onGoogleLogin() {
+		this.googleLoading = true;
 		await this.user.GoogleAuth();
+		setTimeout(() => {
+			this.googleLoading = false;
+		}, 500);
 	}
 
 	async onAnonymousLogin() {
+		this.anonLoading = true;
 		await this.user.AnonymousAuth();
+		setTimeout(() => {
+			this.anonLoading = false;
+		}, 500);
 	}
 
 	ngOnInit(): void {}

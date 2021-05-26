@@ -30,18 +30,21 @@
 }
 
 .task-container {
-	padding: @pl;
-	width: calc(100% - @ml * 2);
+	padding: @pl @pm;
+	width: calc(100% - @mm * 2);
 	box-sizing: border-box;
 	color: @text;
 	font-family: @textFont;
-	margin: @ml @ml @ml @ml;
+	margin: @ml @mm @ml @mm;
 	border-radius: @rm;
 	background-color: @bg500;
 	max-height: 600px;
 	overflow-y: hidden;
+
 	@media(min-width: @tablet) {
-		width: 50%;
+		width: 80%;
+		padding: @pl @pl;
+
 		margin: @ml auto auto auto;
 	}
 }

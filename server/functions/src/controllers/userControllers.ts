@@ -3,6 +3,15 @@ import { db } from "../db";
 import CustomError from "../errors/customError";
 import { firestore } from "firebase-admin/lib/firestore";
 
+/**
+ *    Updates or creates a new user
+ *    requires: {
+ *      user {
+ *        id: string,
+ *        isAnonymous: boolean
+ *      }
+ *    }
+ */
 export const updateUser = catchErrors(async (req, res) => {
   const user = req.body;
 
@@ -21,6 +30,9 @@ export const updateUser = catchErrors(async (req, res) => {
   res.json(user);
 }, "Failed to create user");
 
+/**
+ *    GET users tasks, expects ?uid=string
+ */
 export const getUserTasks = catchErrors(async (req, res) => {
   const uid = req.query.uid as string;
 
@@ -30,6 +42,9 @@ export const getUserTasks = catchErrors(async (req, res) => {
 
   if (doc.exists) {
     let tasks = doc.data()?.tasks;
+
+    // tasks are store as a map in DB for easier access,
+    // format into array
     let response = Object.keys(tasks).map((t) => ({ name: t, ...tasks[t] }));
     let sortedResponse = response.sort((a, b) => {
       if (a.i < b.i) {
@@ -52,6 +67,13 @@ export const getUserTasks = catchErrors(async (req, res) => {
   }
 }, "Failed to get users tasks");
 
+/**
+ *    Adds new task to user
+ *    requires: {
+ *      uid: string,
+ *      name: string
+ *    }
+ */
 export const createTask = catchErrors(async (req, res) => {
   const { uid, name } = req.body;
   let userDoc = await db.collection("users").doc(uid);
@@ -83,6 +105,13 @@ export const createTask = catchErrors(async (req, res) => {
   }
 }, "Failed to create task");
 
+/**
+ *    Deletes task from user
+ *    requires: {
+ *      uid: string,
+ *      name: string
+ *    }
+ */
 export const deleteTask = catchErrors(async (req, res) => {
   const { uid, name } = req.body;
   console.log(uid, name);
@@ -113,11 +142,18 @@ export const deleteTask = catchErrors(async (req, res) => {
       "Failed to find user with provided id",
       404,
       `Did not find a user matching id: ${uid}`,
-      "Failed to get tasks"
+      "Failed to delete task"
     );
   }
 }, "Failed to delete task");
 
+/**
+ *    Updates user task list, used to reorder tasks
+ *    requires: {
+ *      uid: string,
+ *      tasks: task[]
+ *    }
+ */
 export const updateUserTaskList = catchErrors(async (req, res) => {
   const { uid, tasks } = req.body;
 
@@ -132,7 +168,7 @@ export const updateUserTaskList = catchErrors(async (req, res) => {
         "Failed to find user with provided id",
         404,
         `Did not find a user matching id: ${uid}`,
-        "Failed to create task"
+        "Failed to update tasks"
       );
     }
     tasks.forEach((t: { name: string; checked: boolean; i: number }) => {
@@ -147,20 +183,28 @@ export const updateUserTaskList = catchErrors(async (req, res) => {
       "Failed to find user with provided id",
       404,
       `Did not find a user matching id: ${uid}`,
-      "Failed to create task"
+      "Failed to update tasks"
     );
   }
-}, "Failed to update tasklist");
+}, "Failed to update task list");
 
+/**
+ *    Sets task as checked or unchecked
+ *    requires: {
+ *      uid: string,
+ *      name: string
+ *    }
+ */
 export const setTaskChecked = catchErrors(async (req, res) => {
   const { uid, name } = req.body;
   console.log(uid, name);
+
   let userDoc = await db.collection("users").doc(uid);
 
   let doc = await userDoc.get();
   if (doc.exists) {
     const user = doc.data();
-    if (user?.tasks[name] === undefined) {
+    if (user?.tasks[name] === undefined || !user) {
       throw new CustomError(
         "Failed to check task",
         400,
@@ -169,6 +213,7 @@ export const setTaskChecked = catchErrors(async (req, res) => {
       );
     }
     user.tasks[name].checked = !user.tasks[name].checked;
+
     userDoc.set(user);
     return res.status(200).json({ name });
   } else {
@@ -176,7 +221,7 @@ export const setTaskChecked = catchErrors(async (req, res) => {
       "Failed to find user with provided id",
       404,
       `Did not find a user matching id: ${uid}`,
-      "Failed to get tasks"
+      "Failed to check task"
     );
   }
 }, "Failed to check/un-check task");

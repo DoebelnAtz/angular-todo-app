@@ -4,11 +4,15 @@
 	</div>
 
 	<div id="login-auth-container">
-		<button id="login-google" (click)="onGoogleLogin()">
-			log in with google
-		</button>
-		<button id="login-anon" (click)="onAnonymousLogin()">
-			log in anonymously
-		</button>
+		<button
+			[innerText]="googleLoading ? 'loading...' : 'log in with google'"
+			id="login-google"
+			(click)="onGoogleLogin()"
+		></button>
+		<button
+			[innerText]="anonLoading ? 'loading...' : 'log in anonymously'"
+			id="login-anon"
+			(click)="onAnonymousLogin()"
+		></button>
 	</div>
 </div>

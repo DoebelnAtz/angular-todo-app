@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { TaskService } from '../../shared/services/task.service';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { UserService } from '../../shared/services/user.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+
+import { TaskService } from '../../shared/services/task.service';
+import { UserService } from '../../shared/services/user.service';
 import { ApiService } from '../../shared/services/api.service';
 
 @Component({

@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+
 import { Task } from '../../../shared/models/task.model';
 import { TaskService } from '../../../shared/services/task.service';
 import { UserService } from '../../../shared/services/user.service';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
 	selector: 'app-task-card',
