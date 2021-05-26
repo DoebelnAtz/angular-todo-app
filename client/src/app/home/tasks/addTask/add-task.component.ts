@@ -42,8 +42,6 @@ export class AddTaskComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		// Load the current user's data
-		console.log(this.userService.uid);
 		this.subscriptions.push(this.userService.user.subscribe());
 	}
 

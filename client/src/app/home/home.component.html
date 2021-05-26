@@ -1,11 +1,10 @@
 <div class="home">
 	<app-header></app-header>
 	<div
-		[ngClass]="errorMessage ? 'error-visible' : 'error-hidden'"
+		[innerText]="errorMessage"
+		[ngClass]="isError ? 'error-visible' : 'error-hidden'"
 		id="error-banner"
-	>
-		{{ errorMessage }}
-	</div>
+	></div>
 	<div
 		class="task-container"
 		*ngIf="userService.user | async; else loadingTemplate"

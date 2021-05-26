@@ -56,9 +56,6 @@ export class ApiService {
 
 	setError(message: string) {
 		this.errorSubject.next(message);
-		setTimeout(() => {
-			this.errorSubject.next('');
-		}, 5000);
 	}
 
 	public handleError<T>(error: any) {

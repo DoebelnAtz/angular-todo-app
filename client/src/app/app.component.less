@@ -4,7 +4,6 @@
 	top: 50px;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	transition: opacity 0.2s ease-in-out -0.2s;
 	padding: @ps @pl;
 	border: 2px solid @warningText;
 	background-color: @warning;
@@ -12,6 +11,7 @@
 	font-family: @textFont;
 	font-size: 16px;
 	border-radius: @rm;
+	transition: opacity 0.1s ease-in-out;
 	&.offline-visible {
 		opacity: 1;
 	}

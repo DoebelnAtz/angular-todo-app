@@ -51,7 +51,6 @@ export class TaskService {
 					console.log(resp);
 				},
 				(error: any) => {
-					console.log(error);
 					// if we get a duplicate task error we dont want to correct tasklist
 					this.tasks = tempTasks;
 					this.apiService.setError(error.message);
@@ -75,7 +74,6 @@ export class TaskService {
 					console.log(`Deleted: ${name}`);
 				},
 				(error: any) => {
-					console.log(error);
 					this.tasks = tempTasks;
 					this.apiService.setError(error.message);
 				}

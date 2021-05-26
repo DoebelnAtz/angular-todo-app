@@ -13,7 +13,8 @@ import { ApiService } from '../shared/services/api.service';
 export class HomeComponent implements OnInit {
 	user: User | undefined;
 	private subscriptions: Subscription[] = [];
-	public errorMessage: string = '';
+	errorMessage: string = '';
+	isError = false;
 	constructor(
 		public apiService: ApiService,
 		public userService: UserService
@@ -23,6 +24,15 @@ export class HomeComponent implements OnInit {
 		this.subscriptions.push(
 			this.apiService.getError().subscribe((error) => {
 				this.errorMessage = error;
+				let e = this.isError;
+				setTimeout(() => {
+					if (!e && error) {
+						this.isError = false;
+					}
+				}, 4000);
+				if (!this.isError && error) {
+					this.isError = true;
+				}
 			})
 		);
 	}
