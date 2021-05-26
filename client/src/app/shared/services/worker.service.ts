@@ -11,7 +11,6 @@ export class WorkerService {
 		interval(5 * 1000).subscribe(
 			() => {
 				let isOnline = navigator.onLine;
-				console.log(isOnline);
 				obs.next(isOnline);
 			},
 			() => {},
@@ -26,9 +25,9 @@ export class WorkerService {
 		);
 
 		const everyHour$ = interval(60 * 60 * 1000);
-		const everySixHourOnceAppIsStable$ = concat(appIsStable$, everyHour$);
+		const everyHourOnceAppIsStable$ = concat(appIsStable$, everyHour$);
 		// check for an updated version of the app every hour
-		everySixHourOnceAppIsStable$.subscribe(() => updates.checkForUpdate());
+		everyHourOnceAppIsStable$.subscribe(() => updates.checkForUpdate());
 
 		// if update is found, prompt the user and ask for a reload
 		updates.available.subscribe((event) => {

@@ -26,5 +26,14 @@
         ]
       }
     }
-  ]
+  ],
+	"dataGroups": [{
+		"name": "requests",
+		"urls": ["https://us-central1-angular-todo-68ebc.cloudfunctions.net/app/api/users/tasks?uid=(.*)"],
+		"cacheConfig": {
+			"maxAge": "1d",
+			"strategy": "freshness",
+			"maxSize": 10
+		}
+	}]
 }
