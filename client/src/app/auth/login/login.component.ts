@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { UserService } from '../../shared/services/user.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
 	selector: 'app-login',
@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
 	googleLoading = false;
 	anonLoading = false;
 
-	constructor(private user: UserService) {}
+	constructor(private user: AuthService) {}
 
 	/**
 	 *  timeout in login to give time to redirect without

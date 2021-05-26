@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 
 import { Task } from '../../../shared/models/task.model';
-import { TaskService } from '../../../shared/services/task.service';
 import { UserService } from '../../../shared/services/user.service';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
 	selector: 'app-task-card',
@@ -14,23 +14,19 @@ export class TaskCardComponent {
 	@Input() editing: boolean = true;
 
 	constructor(
-		private taskService: TaskService,
-		private userService: UserService
+		private userService: UserService,
+		private authService: AuthService
 	) {}
 
 	onTaskDeleteClick() {
-		console.log(this.userService.uid);
-		if (this.userService.uid && this.task?.name)
+		// console.log(this.authService.uid);
+		if (this.task?.name)
 			if (this.editing) {
-				this.taskService.deleteTask(
-					this.userService.uid,
-					this.task.name
-				);
+				this.userService.deleteTask(this.task.name);
 			}
 	}
 	onTaskOptionClick() {
-		console.log(this.userService.uid);
-		if (this.userService.uid && this.task?.name)
-			this.taskService.checkTask(this.userService.uid, this.task.name);
+		// 	console.log(this.authService.uid);
+		if (this.task?.name) this.userService.checkTask(this.task.name);
 	}
 }

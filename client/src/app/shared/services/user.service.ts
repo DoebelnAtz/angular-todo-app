@@ -1,111 +1,155 @@
 import { Injectable, NgZone } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { ApiService } from './api.service';
+import { HttpClient } from '@angular/common/http';
+import { catchError, mergeMap, switchMap } from 'rxjs/operators';
+
+import { Task } from '../models/task.model';
+import { AuthService } from './auth.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import AuthProvider = firebase.auth.AuthProvider;
-import firebase from 'firebase/app';
-import { HttpClient } from '@angular/common/http';
-
-import { ApiService } from './api.service';
+import { BehaviorSubject } from 'rxjs';
 import { User } from '../models/user.model';
 
 @Injectable({
 	providedIn: 'root',
 })
-export class UserService extends ApiService {
-	public user: Observable<User>;
-	public uid: string | undefined;
+export class UserService extends AuthService {
+	tasks$ = new BehaviorSubject<Task[]>([]);
+	tasks: Task[] = [];
 	constructor(
-		public afs: AngularFirestore,
-		public afAuth: AngularFireAuth,
-		public router: Router,
-		public ngZone: NgZone,
-		http: HttpClient
+		apiService: ApiService,
+		afAuth: AngularFireAuth,
+		router: Router,
+		ngZone: NgZone
 	) {
-		super(http);
-		this.user = new Observable<User>((observer) => {
-			this.afAuth.authState.subscribe((user) => {
-				if (user) {
-					let userObj = {
-						uid: user.uid,
-						isAnonymous: user.isAnonymous,
-					};
-					observer.next(userObj);
-					this.uid = user.uid;
-					localStorage.setItem('user', JSON.stringify(user));
-				} else {
-					observer.next({} as User);
-					localStorage.setItem('user', '{}');
-				}
-			});
-		});
+		super(afAuth, router, ngZone, apiService);
 	}
 
-	async PatchUser(user: User) {
-		return this.patch('/users', user).toPromise();
-	}
-
-	async GoogleAuth() {
-		return await this.AuthLogin(new firebase.auth.GoogleAuthProvider());
-	}
-
-	async AnonymousAuth() {
-		return this.afAuth
-			.signInAnonymously()
-			.then((res) => {
-				console.log(res);
-				if (res.user) {
-					localStorage.setItem('user', JSON.stringify(res.user));
-
-					let userObj = {
-						uid: res.user.uid,
-						isAnonymous: res.user.isAnonymous,
-					};
-					this.PatchUser(userObj).then(() => {
-						this.ngZone.run(() => {
-							this.router.navigate(['/']);
-						});
-					});
-				}
-			})
-			.catch((error: ErrorEvent) => {});
-	}
-
-	// Auth logic to run auth providers
-	AuthLogin(provider: AuthProvider) {
-		return this.afAuth
-			.signInWithPopup(provider)
-			.then((res) => {
-				console.log(res);
-				if (res.user) {
-					localStorage.setItem('user', JSON.stringify(res.user));
-
-					let userObj = {
-						uid: res.user.uid,
-						isAnonymous: res.user.isAnonymous,
-					};
-					this.PatchUser(userObj).then(() => {
-						this.ngZone.run(() => {
-							this.router.navigate(['/']);
-						});
-					});
-				}
-			})
-			.catch((error) => {
-				window.alert(error);
+	getUser() {
+		return this.uid$
+			.pipe(
+				switchMap((uid) =>
+					this.apiService
+						.get<User>('/users', {
+							params: {
+								uid,
+							},
+						})
+						.pipe(
+							catchError((err) =>
+								this.apiService.handleError(err)
+							)
+						)
+				)
+			)
+			.subscribe((resp) => {
+				console.log(resp);
+				// why is TS complaining about this?
+				// @ts-ignore
+				this.tasks$.next(resp.tasks);
 			});
 	}
 
-	Logout() {
-		localStorage.setItem('user', '{}');
-		this.afAuth.signOut().then(() => {
-			this.router.navigate(['/']);
-		});
+	createTask(name: string) {
+		/**
+		 * to make the app more responsive we add task to list
+		 * before the request and remove it on error
+		 */
+		return this.uid$
+			.pipe(
+				switchMap((uid) =>
+					this.apiService
+						.post('/users/tasks', {
+							name: name,
+							uid: uid,
+						})
+						.pipe(
+							catchError((err) =>
+								this.apiService.handleError(err)
+							)
+						)
+				)
+			)
+			.subscribe(
+				(resp: any) => {
+					console.log(resp);
+				},
+				(error: any) => {
+					// if we get a duplicate task error we dont want to correct tasklist
+					this.apiService.setError(error.message);
+				}
+			);
 	}
 
-	get isLoggedIn(): boolean {
-		const user = JSON.parse(localStorage.getItem('user') || '{}');
-		return user !== '{}' && (user.emailVerified || user.isAnonymous);
+	deleteTask(name: string) {
+		// we save a copy of tasks to revert back to on error
+		return this.uid$
+			.pipe(
+				switchMap((uid) =>
+					this.apiService.delete('/users/tasks', {
+						body: {
+							name: name,
+							uid: uid,
+						},
+					})
+				)
+			)
+			.subscribe(
+				() => {
+					console.log(`Deleted: ${name}`);
+				},
+				(error: any) => {
+					this.apiService.setError(error.message);
+				}
+			);
+	}
+
+	updateTasks() {
+		return this.uid$
+			.pipe(
+				switchMap((uid) =>
+					this.apiService
+						.patch('/users/tasks', {
+							uid,
+							tasks: this.tasks,
+						})
+						.pipe(
+							catchError((err) =>
+								this.apiService.handleError(err)
+							)
+						)
+				)
+			)
+			.subscribe(
+				(r: any) => {
+					console.log(r);
+				},
+				(error: any) => {
+					console.log(error);
+					this.apiService.setError(error.message);
+				}
+			);
+	}
+
+	checkTask(name: string) {
+		return this.uid$
+			.pipe(
+				switchMap((uid) =>
+					this.apiService
+						.put('/users/tasks', { uid, name })
+						.pipe(
+							catchError((err) =>
+								this.apiService.handleError(err)
+							)
+						)
+				)
+			)
+			.subscribe(
+				(r: any) => {},
+				(error: any) => {
+					console.log(error);
+					this.apiService.setError(error.message);
+				}
+			);
 	}
 }

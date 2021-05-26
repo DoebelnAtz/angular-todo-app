@@ -1,5 +1,5 @@
 export interface User {
 	uid: string;
 	isAnonymous: boolean;
-	tasks?: Task[];
+	tasks: Task[];
 }

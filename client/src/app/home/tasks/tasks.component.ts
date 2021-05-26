@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
-import { TaskService } from '../../shared/services/task.service';
 import { UserService } from '../../shared/services/user.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { ApiService } from '../../shared/services/api.service';
 
 @Component({
@@ -16,8 +16,8 @@ export class TasksComponent implements OnInit {
 	editing = false;
 	constructor(
 		private apiService: ApiService,
-		public taskService: TaskService,
-		private userService: UserService
+		public userService: UserService,
+		private authService: AuthService
 	) {}
 
 	onEditChange(isEditing: boolean) {
@@ -25,24 +25,33 @@ export class TasksComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		if (!!this.userService.uid) {
-			this.taskService.getTasks(this.userService.uid);
-		}
+		this.authService.uid$.subscribe((u) => {
+			console.log(u);
+		});
+		// this.userService.getUser().subscribe((u) => {
+		// 	console.log(u);
+		// });
+		// if (!!this.authService.uid) {
+		this.userService.getUser();
+		this.userService.tasks$.subscribe((resp) => {
+			console.log(resp);
+		});
+		// }
 	}
 
 	drop(event: CdkDragDrop<string[]>) {
 		let data = event.item.data;
 		moveItemInArray(
-			this.taskService.tasks,
+			this.userService.tasks,
 			event.previousIndex,
 			event.currentIndex
 		);
-		this.taskService.tasks = this.taskService.tasks.map((t, i) => ({
+		this.userService.tasks = this.userService.tasks.map((t, i) => ({
 			...t,
 			i: i,
 		}));
-		this.userService.uid &&
-			this.taskService.updateTasks(this.userService.uid);
+		// this.authService.uid &&
+		// this.userService.updateTasks(this.authService.uid);
 	}
 
 	ngOnDestroy() {

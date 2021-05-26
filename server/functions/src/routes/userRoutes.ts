@@ -3,7 +3,7 @@ import { check } from "express-validator";
 
 import {
   updateUser,
-  getUserTasks,
+  getUser,
   createTask,
   deleteTask,
   setTaskChecked,
@@ -14,11 +14,7 @@ const userRouter = Router();
 
 userRouter.patch("/", updateUser);
 
-userRouter.get(
-  "/tasks",
-  [check("uid").not().equals("undefined")],
-  getUserTasks
-);
+userRouter.get("/", getUser);
 
 userRouter.post(
   "/tasks",

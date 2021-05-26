@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { UserService } from '../shared/services/user.service';
+import { AuthService } from '../shared/services/auth.service';
 import { User } from '../shared/models/user.model';
 import { ApiService } from '../shared/services/api.service';
 
@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
 	isError = false;
 	constructor(
 		public apiService: ApiService,
-		public userService: UserService
+		public authService: AuthService
 	) {}
 
 	getError() {

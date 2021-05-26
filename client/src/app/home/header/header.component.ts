@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { UserService } from '../../shared/services/user.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
 	selector: 'app-header',
@@ -9,7 +9,7 @@ import { UserService } from '../../shared/services/user.service';
 	styleUrls: ['./header.component.less'],
 })
 export class HeaderComponent {
-	constructor(private userService: UserService, private router: Router) {}
+	constructor(private userService: AuthService, private router: Router) {}
 
 	onSignOutClick() {
 		this.userService.Logout();

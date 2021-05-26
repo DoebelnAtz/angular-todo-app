@@ -33,7 +33,7 @@ export const updateUser = catchErrors(async (req, res) => {
 /**
  *    GET users tasks, expects ?uid=string
  */
-export const getUserTasks = catchErrors(async (req, res) => {
+export const getUser = catchErrors(async (req, res) => {
   const uid = req.query.uid as string;
 
   let userDoc = await db.collection("users").doc(uid);
@@ -41,12 +41,13 @@ export const getUserTasks = catchErrors(async (req, res) => {
   let doc = await userDoc.get();
 
   if (doc.exists) {
-    let tasks = doc.data()?.tasks;
+    let user = doc.data();
+    let tasks = user?.tasks;
 
     // tasks are store as a map in DB for easier access,
     // format into array
-    let response = Object.keys(tasks).map((t) => ({ name: t, ...tasks[t] }));
-    let sortedResponse = response.sort((a, b) => {
+    let mappedTasks = Object.keys(tasks).map((t) => ({ name: t, ...tasks[t] }));
+    let sortedTasks = mappedTasks.sort((a, b) => {
       if (a.i < b.i) {
         return -1;
       }
@@ -55,8 +56,13 @@ export const getUserTasks = catchErrors(async (req, res) => {
       }
       return 0;
     });
-    console.log(response, sortedResponse);
-    return res.json(sortedResponse);
+
+    const response = {
+      ...user,
+      tasks: sortedTasks,
+    };
+
+    return res.json(response);
   } else {
     throw new CustomError(
       "Failed to find user with provided id",

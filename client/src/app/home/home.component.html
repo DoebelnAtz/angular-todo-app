@@ -7,7 +7,7 @@
 	></div>
 	<div
 		class="task-container"
-		*ngIf="userService.user | async; else loadingTemplate"
+		*ngIf="authService.user$ | async; else loadingTemplate"
 	>
 		<app-tasks></app-tasks>
 	</div>
