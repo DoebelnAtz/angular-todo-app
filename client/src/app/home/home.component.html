@@ -5,11 +5,12 @@
 		[ngClass]="isError ? 'error-visible' : 'error-hidden'"
 		id="error-banner"
 	></div>
+
 	<div
+		*ngIf="userService.tasks$ | async as tasks; else loadingTemplate"
 		class="task-container"
-		*ngIf="authService.user$ | async; else loadingTemplate"
 	>
-		<app-tasks></app-tasks>
+		<app-tasks [tasks]="tasks"></app-tasks>
 	</div>
 	<ng-template #loadingTemplate>
 		<div class="task-container">...loading</div>

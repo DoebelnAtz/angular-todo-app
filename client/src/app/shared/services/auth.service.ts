@@ -109,7 +109,7 @@ export class AuthService {
 	Logout() {
 		localStorage.setItem('user', '{}');
 		this.afAuth.signOut().then(() => {
-			this.router.navigate(['/']);
+			this.router.navigate(['/login']);
 		});
 	}
 

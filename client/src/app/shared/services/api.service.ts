@@ -9,7 +9,6 @@ import { environment } from '../../../environments/environment';
 })
 export class ApiService {
 	private errorSubject = new BehaviorSubject<string>('');
-	public e: string = '';
 	constructor(private http: HttpClient) {}
 
 	post<T>(endpoint: string, data: any, ...args: any[]) {
@@ -44,10 +43,7 @@ export class ApiService {
 	}
 
 	delete<T>(endpoint: string, data: any) {
-		return this.http.delete<HttpSentEvent & T>(
-			`${environment.url}${endpoint}`,
-			data
-		);
+		return this.http.delete<T>(`${environment.url}${endpoint}`, data);
 	}
 
 	getError(): Observable<string> {
@@ -59,8 +55,10 @@ export class ApiService {
 	}
 
 	public handleError<T>(error: any) {
-		this.e = error.error?.message || 'Something went wrong';
-		console.log(`From handleError: ${this.e}`);
+		let e = error.error?.message || 'Something went wrong';
+		console.log(`From handleError: ${e}`);
+		this.errorSubject.next(e);
+
 		return throwError(error.error);
 	}
 }

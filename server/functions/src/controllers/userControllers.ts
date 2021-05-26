@@ -2,6 +2,7 @@ import { catchErrors } from "../errors/catchErrors";
 import { db } from "../db";
 import CustomError from "../errors/customError";
 import { firestore } from "firebase-admin/lib/firestore";
+import { mapTasksToArray } from "../utils";
 
 /**
  *    Updates or creates a new user
@@ -46,7 +47,7 @@ export const getUser = catchErrors(async (req, res) => {
 
     // tasks are store as a map in DB for easier access,
     // format into array
-    let mappedTasks = Object.keys(tasks).map((t) => ({ name: t, ...tasks[t] }));
+    let mappedTasks = mapTasksToArray(tasks);
     let sortedTasks = mappedTasks.sort((a, b) => {
       if (a.i < b.i) {
         return -1;
@@ -95,12 +96,18 @@ export const createTask = catchErrors(async (req, res) => {
         "A task of that name already exists"
       );
     }
-    user.tasks[name] = {
-      checked: false,
-      i: Object.keys(user.tasks).length | 0,
+    let updatedTasks = {
+      ...user.tasks,
+      [name]: {
+        checked: false,
+        i: Object.keys(user.tasks).length | 0,
+      },
     };
+    user.tasks = updatedTasks;
+    let mappedTasks = mapTasksToArray(updatedTasks);
+
     userDoc.set(user);
-    return res.status(201).json({ name });
+    return res.status(201).json(mappedTasks);
   } else {
     throw new CustomError(
       "Failed to find user with provided id",
@@ -142,7 +149,8 @@ export const deleteTask = catchErrors(async (req, res) => {
       },
       { merge: true }
     );
-    return res.status(200).json({ name });
+    let result = mapTasksToArray(user.tasks).filter((t) => t.name !== name);
+    return res.status(200).json(result);
   } else {
     throw new CustomError(
       "Failed to find user with provided id",

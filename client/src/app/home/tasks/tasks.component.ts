@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 import { UserService } from '../../shared/services/user.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { ApiService } from '../../shared/services/api.service';
+import { TaskType } from '../../shared/models/task.model';
 
 @Component({
 	selector: 'app-tasks',
@@ -13,6 +14,7 @@ import { ApiService } from '../../shared/services/api.service';
 })
 export class TasksComponent implements OnInit {
 	private subscriptions: Subscription[] = [];
+	@Input() tasks: TaskType[] = [];
 	editing = false;
 	constructor(
 		private apiService: ApiService,
@@ -41,12 +43,8 @@ export class TasksComponent implements OnInit {
 
 	drop(event: CdkDragDrop<string[]>) {
 		let data = event.item.data;
-		moveItemInArray(
-			this.userService.tasks,
-			event.previousIndex,
-			event.currentIndex
-		);
-		this.userService.tasks = this.userService.tasks.map((t, i) => ({
+		moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
+		this.tasks = this.tasks.map((t, i) => ({
 			...t,
 			i: i,
 		}));

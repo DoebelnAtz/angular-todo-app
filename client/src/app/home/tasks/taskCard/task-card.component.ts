@@ -1,8 +1,7 @@
 import { Component, Input } from '@angular/core';
 
-import { Task } from '../../../shared/models/task.model';
+import { TaskType } from '../../../shared/models/task.model';
 import { UserService } from '../../../shared/services/user.service';
-import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
 	selector: 'app-task-card',
@@ -10,23 +9,27 @@ import { AuthService } from '../../../shared/services/auth.service';
 	styleUrls: ['./task-card.component.less'],
 })
 export class TaskCardComponent {
-	@Input() task: Task | undefined;
+	@Input() task: TaskType = { name: '', checked: false, i: 0 };
+	@Input() tasks: TaskType[] = [];
+
 	@Input() editing: boolean = true;
 
-	constructor(
-		private userService: UserService,
-		private authService: AuthService
-	) {}
+	constructor(private userService: UserService) {}
 
 	onTaskDeleteClick() {
-		// console.log(this.authService.uid);
-		if (this.task?.name)
-			if (this.editing) {
-				this.userService.deleteTask(this.task.name);
-			}
+		if (this.editing)
+			this.userService.updateTasks(
+				this.tasks.filter((t) => t.name !== this.task.name)
+			);
 	}
 	onTaskOptionClick() {
-		// 	console.log(this.authService.uid);
-		if (this.task?.name) this.userService.checkTask(this.task.name);
+		if (!this.editing)
+			this.userService.updateTasks(
+				this.tasks.map((t) =>
+					t.name === this.task.name
+						? { ...t, checked: !t.checked }
+						: t
+				)
+			);
 	}
 }

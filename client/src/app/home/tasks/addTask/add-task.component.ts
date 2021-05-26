@@ -1,8 +1,9 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { UserService } from '../../../shared/services/user.service';
 import { AuthService } from '../../../shared/services/auth.service';
+import { TaskType } from '../../../shared/models/task.model';
 
 @Component({
 	selector: 'app-add-task',
@@ -10,6 +11,7 @@ import { AuthService } from '../../../shared/services/auth.service';
 	styleUrls: ['./add-task.component.less'],
 })
 export class AddTaskComponent implements OnInit {
+	@Input() tasks: TaskType[] = [];
 	@Output() editEvent = new EventEmitter<boolean>();
 	isEditing = false;
 	taskName: string = '';
@@ -37,7 +39,12 @@ export class AddTaskComponent implements OnInit {
 
 	addTask() {
 		// !!this.authService.uid &&
-		this.userService.createTask(this.taskName);
+		this.subscriptions.push(
+			this.userService.updateTasks([
+				...this.tasks,
+				{ name: this.taskName, checked: false, i: this.tasks.length },
+			])
+		);
 		this.taskName = '';
 	}
 

@@ -12,9 +12,10 @@ import {
 
 const userRouter = Router();
 
-userRouter.patch("/", updateUser);
-
 userRouter.get("/", getUser);
+
+userRouter.patch("/", updateUser);
+userRouter.patch("/tasks", updateUserTaskList);
 
 userRouter.post(
   "/tasks",
@@ -24,8 +25,6 @@ userRouter.post(
   ],
   createTask
 );
-
-userRouter.patch("/tasks", updateUserTaskList);
 
 userRouter.put("/tasks", setTaskChecked);
 

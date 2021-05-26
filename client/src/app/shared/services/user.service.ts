@@ -1,9 +1,9 @@
 import { Injectable, NgZone } from '@angular/core';
 import { ApiService } from './api.service';
 import { HttpClient } from '@angular/common/http';
-import { catchError, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, take } from 'rxjs/operators';
 
-import { Task } from '../models/task.model';
+import { TaskType } from '../models/task.model';
 import { AuthService } from './auth.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
@@ -14,8 +14,7 @@ import { User } from '../models/user.model';
 	providedIn: 'root',
 })
 export class UserService extends AuthService {
-	tasks$ = new BehaviorSubject<Task[]>([]);
-	tasks: Task[] = [];
+	tasks$ = new BehaviorSubject<TaskType[]>([]);
 	constructor(
 		apiService: ApiService,
 		afAuth: AngularFireAuth,
@@ -23,6 +22,10 @@ export class UserService extends AuthService {
 		ngZone: NgZone
 	) {
 		super(afAuth, router, ngZone, apiService);
+	}
+
+	takeTasks() {
+		return this.tasks$.pipe(take(1));
 	}
 
 	getUser() {
@@ -44,8 +47,6 @@ export class UserService extends AuthService {
 			)
 			.subscribe((resp) => {
 				console.log(resp);
-				// why is TS complaining about this?
-				// @ts-ignore
 				this.tasks$.next(resp.tasks);
 			});
 	}
@@ -55,6 +56,7 @@ export class UserService extends AuthService {
 		 * to make the app more responsive we add task to list
 		 * before the request and remove it on error
 		 */
+
 		return this.uid$
 			.pipe(
 				switchMap((uid) =>
@@ -64,21 +66,15 @@ export class UserService extends AuthService {
 							uid: uid,
 						})
 						.pipe(
-							catchError((err) =>
-								this.apiService.handleError(err)
-							)
+							catchError((err) => {
+								return this.apiService.handleError(err);
+							})
 						)
 				)
 			)
-			.subscribe(
-				(resp: any) => {
-					console.log(resp);
-				},
-				(error: any) => {
-					// if we get a duplicate task error we dont want to correct tasklist
-					this.apiService.setError(error.message);
-				}
-			);
+			.subscribe((resp: any) => {
+				this.tasks$.next(resp);
+			});
 	}
 
 	deleteTask(name: string) {
@@ -86,7 +82,7 @@ export class UserService extends AuthService {
 		return this.uid$
 			.pipe(
 				switchMap((uid) =>
-					this.apiService.delete('/users/tasks', {
+					this.apiService.delete<TaskType[]>('/users/tasks', {
 						body: {
 							name: name,
 							uid: uid,
@@ -95,7 +91,9 @@ export class UserService extends AuthService {
 				)
 			)
 			.subscribe(
-				() => {
+				(resp) => {
+					// @ts-ignore
+					this.tasks$.next(resp);
 					console.log(`Deleted: ${name}`);
 				},
 				(error: any) => {
@@ -104,14 +102,15 @@ export class UserService extends AuthService {
 			);
 	}
 
-	updateTasks() {
+	updateTasks(tasks: TaskType[]) {
+		this.tasks$.next(tasks);
 		return this.uid$
 			.pipe(
 				switchMap((uid) =>
 					this.apiService
 						.patch('/users/tasks', {
 							uid,
-							tasks: this.tasks,
+							tasks: tasks,
 						})
 						.pipe(
 							catchError((err) =>

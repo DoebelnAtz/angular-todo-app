@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../shared/services/auth.service';
 import { User } from '../shared/models/user.model';
 import { ApiService } from '../shared/services/api.service';
+import { UserService } from '../shared/services/user.service';
 
 @Component({
 	selector: 'app-home',
@@ -11,13 +12,12 @@ import { ApiService } from '../shared/services/api.service';
 	styleUrls: ['./home.component.less'],
 })
 export class HomeComponent implements OnInit {
-	user: User | undefined;
 	private subscriptions: Subscription[] = [];
 	errorMessage: string = '';
 	isError = false;
 	constructor(
 		public apiService: ApiService,
-		public authService: AuthService
+		public userService: UserService
 	) {}
 
 	getError() {
