@@ -1,4 +1,4 @@
-<app-add-task [tasks]="tasks" (editEvent)="onEditChange($event)"></app-add-task>
+<app-add-task (editEvent)="onEditChange($event)"></app-add-task>
 
 <div
 	*ngIf="!!tasks?.length; else noTasksTemplate"

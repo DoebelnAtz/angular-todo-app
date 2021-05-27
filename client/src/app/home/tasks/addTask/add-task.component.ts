@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs';
 
 import { UserService } from '../../../shared/services/user.service';
 import { AuthService } from '../../../shared/services/auth.service';
-import { TaskType } from '../../../shared/models/task.model';
 
 @Component({
 	selector: 'app-add-task',
@@ -39,12 +38,7 @@ export class AddTaskComponent implements OnInit {
 
 	addTask() {
 		// !!this.authService.uid &&
-		this.subscriptions.push(
-			this.userService.updateTasks([
-				...this.tasks,
-				{ name: this.taskName, checked: false, i: this.tasks.length },
-			])
-		);
+		this.subscriptions.push(this.userService.createTask(this.taskName));
 		this.taskName = '';
 	}
 

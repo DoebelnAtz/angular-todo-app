@@ -9,27 +9,19 @@ import { UserService } from '../../../shared/services/user.service';
 	styleUrls: ['./task-card.component.less'],
 })
 export class TaskCardComponent {
-	@Input() task: TaskType = { name: '', checked: false, i: 0 };
-	@Input() tasks: TaskType[] = [];
+	@Input() task: TaskType | undefined;
+	@Input() tasks: TaskType[] | undefined;
 
 	@Input() editing: boolean = true;
 
 	constructor(private userService: UserService) {}
 
 	onTaskDeleteClick() {
-		if (this.editing)
-			this.userService.updateTasks(
-				this.tasks.filter((t) => t.name !== this.task.name)
-			);
+		if (this.task?.name && this.editing)
+			this.userService.deleteTask(this.task.name);
 	}
 	onTaskOptionClick() {
-		if (!this.editing)
-			this.userService.updateTasks(
-				this.tasks.map((t) =>
-					t.name === this.task.name
-						? { ...t, checked: !t.checked }
-						: t
-				)
-			);
+		if (this.task?.name && !this.editing)
+			this.userService.checkTask(this.task.name);
 	}
 }
