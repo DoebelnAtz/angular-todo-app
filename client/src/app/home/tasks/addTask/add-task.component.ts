@@ -38,7 +38,13 @@ export class AddTaskComponent implements OnInit {
 
 	addTask() {
 		// !!this.authService.uid &&
-		this.subscriptions.push(this.userService.createTask(this.taskName));
+		this.subscriptions.push(
+			this.userService.createTask({
+				name: this.taskName,
+				checked: false,
+				i: this.tasks.length,
+			})
+		);
 		this.taskName = '';
 	}
 

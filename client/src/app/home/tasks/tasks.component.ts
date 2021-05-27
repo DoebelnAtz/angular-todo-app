@@ -21,7 +21,7 @@ export class TasksComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.userService.getUser();
+		this.subscriptions.push(this.userService.getUser());
 	}
 
 	drop(event: CdkDragDrop<string[]>) {
@@ -30,7 +30,7 @@ export class TasksComponent implements OnInit {
 			...t,
 			i: i,
 		}));
-		this.userService.updateTasks(this.tasks);
+		this.subscriptions.push(this.userService.updateTasks(this.tasks));
 	}
 
 	ngOnDestroy() {

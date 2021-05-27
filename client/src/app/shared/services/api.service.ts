@@ -3,7 +3,7 @@ import { HttpClient, HttpSentEvent } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { catchError } from 'rxjs/operators';
+import { catchError, distinctUntilChanged } from 'rxjs/operators';
 
 @Injectable({
 	providedIn: 'root',
@@ -43,11 +43,7 @@ export class ApiService {
 	}
 
 	getError(): Observable<string> {
-		return this.errorSubject.asObservable();
-	}
-
-	setError(message: string) {
-		this.errorSubject.next(message);
+		return this.errorSubject.asObservable().pipe(distinctUntilChanged());
 	}
 
 	public handleError<T>(error: any) {
