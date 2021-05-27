@@ -29,11 +29,11 @@
   ],
 	"dataGroups": [{
 		"name": "requests",
-		"urls": ["/app/api/users/tasks?uid="],
+		"urls": ["/app/api/users?uid="],
 		"cacheConfig": {
 			"maxAge": "1d",
-			"strategy": "performance",
-			"maxSize": 10
+			"strategy": "freshness",
+			"maxSize": 50
 		}
 	}]
 }

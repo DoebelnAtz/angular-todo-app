@@ -47,7 +47,7 @@ export class UserService extends AuthService {
 	}
 
 	withUid(callback: (uid: string | null) => Observable<any>) {
-		return this.uid$.pipe(switchMap((uid) => callback(uid)));
+		return this.uid$.pipe(mergeMap((uid) => callback(uid)));
 	}
 
 	getUser() {
@@ -126,8 +126,6 @@ export class UserService extends AuthService {
 					throw error;
 				})
 			)
-			.subscribe((resp) => {
-				this.setTasks(resp);
-			});
+			.subscribe();
 	}
 }
