@@ -1,4 +1,11 @@
-export const sortTasks = (a: any, b: any) => {
+import { Task, TaskMap } from "../types";
+
+/**
+ * sorts array of tasks by i
+ * @param a
+ * @param b
+ */
+export const sortTasks = (a: Task, b: Task) => {
   if (a.i < b.i) {
     return -1;
   }
@@ -7,8 +14,11 @@ export const sortTasks = (a: any, b: any) => {
   }
   return 0;
 };
-
-export const mapTasksToArray = (taskMap: any) => {
+/**
+ * converts a firebase map of tasks into array
+ * @param taskMap
+ */
+export const mapTasksToArray = (taskMap: TaskMap): Task[] => {
   let mappedTasks = Object.keys(taskMap).map((name) => ({
     name,
     ...taskMap[name],
