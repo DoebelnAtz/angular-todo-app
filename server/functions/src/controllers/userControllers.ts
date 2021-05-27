@@ -2,7 +2,7 @@ import { catchErrors } from "../errors/catchErrors";
 import { db } from "../db";
 import CustomError from "../errors/customError";
 import { firestore } from "firebase-admin/lib/firestore";
-import { mapTasksToArray } from "../utils";
+import { mapTasksToArray, sortTasks } from "../utils";
 
 /**
  *    Updates or creates a new user
@@ -48,15 +48,7 @@ export const getUser = catchErrors(async (req, res) => {
     // tasks are store as a map in DB for easier access,
     // format into array
     let mappedTasks = mapTasksToArray(tasks);
-    let sortedTasks = mappedTasks.sort((a, b) => {
-      if (a.i < b.i) {
-        return -1;
-      }
-      if (a.i > b.i) {
-        return 1;
-      }
-      return 0;
-    });
+    let sortedTasks = mappedTasks.sort(sortTasks);
 
     const response = {
       ...user,
@@ -226,10 +218,11 @@ export const setTaskChecked = catchErrors(async (req, res) => {
         "The task does not exist"
       );
     }
-    user.tasks[name].checked = !user.tasks[name].checked;
 
+    user.tasks[name].checked = !user.tasks[name].checked;
     userDoc.set(user);
-    return res.status(200).json({ name });
+    let mappedTasks = mapTasksToArray(user.tasks);
+    return res.status(200).json(mappedTasks);
   } else {
     throw new CustomError(
       "Failed to find user with provided id",
@@ -238,4 +231,4 @@ export const setTaskChecked = catchErrors(async (req, res) => {
       "Failed to check task"
     );
   }
-}, "Failed to check/un-check task");
+}, "Failed to check task");

@@ -45,10 +45,6 @@ export class AuthService {
 		});
 	}
 
-	async getUid() {
-		return this.uid$;
-	}
-
 	async PatchUser(user: User) {
 		return this.apiService.patch('/users', user).toPromise();
 	}
